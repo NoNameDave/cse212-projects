@@ -1,30 +1,38 @@
 ﻿public static class Priority {
     public static void Test() {
-        // TODO Problem 2 - Write and run test cases and fix the code to match requirements
-        // Example of creating and using the priority queue
-        var priorityQueue = new PriorityQueue();
-        Console.WriteLine(priorityQueue);
+        var pq = new PriorityQueue();
+        pq.Enqueue("Task1", 5);
+        pq.Enqueue("Task2", 1);
+        pq.Enqueue("Task3", 3);
+        pq.Enqueue("Task4", 5);
 
-        // Test Cases
+        // Test 1: Dequeue should return "Task1" first (first highest priority item)
+        Console.WriteLine("Test 1: Dequeue High Priority");
+        var item = pq.Dequeue();
+        if (item == "Task1") {
+            Console.WriteLine("Pass");
+        } else {
+            Console.WriteLine("Fail");
+        }
 
-        // Test 1
-        // Scenario: 
-        // Expected Result: 
-        Console.WriteLine("Test 1");
+        // Test 2: Next dequeue should return "Task4" (second item with same high priority)
+        Console.WriteLine("Test 2: Dequeue Second High Priority");
+        item = pq.Dequeue();
+        if (item == "Task4") {
+            Console.WriteLine("Pass");
+        } else {
+            Console.WriteLine("Fail");
+        }
 
-        // Defect(s) Found: 
+        // Test 3: Verify FIFO for different priorities
+        Console.WriteLine("Test 3: Verify FIFO for Lower Priorities");
+        item = pq.Dequeue();
+        if (item == "Task3") {
+            Console.WriteLine("Pass");
+        } else {
+            Console.WriteLine("Fail");
+        }
 
-        Console.WriteLine("---------");
-
-        // Test 2
-        // Scenario: 
-        // Expected Result: 
-        Console.WriteLine("Test 2");
-
-        // Defect(s) Found: 
-
-        Console.WriteLine("---------");
-
-        // Add more Test Cases As Needed Below
+        // Add more tests as needed
     }
 }

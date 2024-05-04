@@ -14,21 +14,22 @@
     }
 
     public String Dequeue() {
-        if (_queue.Count == 0) // Verify the queue is not empty
-        {
+        if (_queue.Count == 0) {
             Console.WriteLine("The queue is empty.");
             return null;
         }
 
-        // Find the index of the item with the highest priority to remove
+        // Find the item with the highest priority
         var highPriorityIndex = 0;
-        for (int index = 1; index < _queue.Count - 1; index++) {
-            if (_queue[index].Priority >= _queue[highPriorityIndex].Priority)
+        for (int index = 1; index < _queue.Count; index++) { // corrected loop condition
+            if (_queue[index].Priority > _queue[highPriorityIndex].Priority) {
                 highPriorityIndex = index;
+            }
         }
 
         // Remove and return the item with the highest priority
         var value = _queue[highPriorityIndex].Value;
+        _queue.RemoveAt(highPriorityIndex); // remove the item
         return value;
     }
 
