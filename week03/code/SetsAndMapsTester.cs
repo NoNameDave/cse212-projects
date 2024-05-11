@@ -108,9 +108,17 @@ public static class SetsAndMapsTester {
     /// </summary>
     /// <param name="words">An array of 2-character words (lowercase, no duplicates)</param>
     private static void DisplayPairs(string[] words) {
-        // To display the pair correctly use something like:
-        // Console.WriteLine($"{word} & {pair}");
-        // Each pair of words should displayed on its own line.
+        HashSet<string> wordSet = new HashSet<string>(words);
+        HashSet<string> displayed = new HashSet<string>();
+
+        foreach (var word in words) {
+            string reversed = new string(word.Reverse().ToArray());
+            if (word != reversed && wordSet.Contains(reversed) && !displayed.Contains(word)) {
+                Console.WriteLine($"{word} & {reversed}");
+                displayed.Add(word);
+                displayed.Add(reversed);
+            }
+        }
     }
 
     /// <summary>
@@ -129,9 +137,20 @@ public static class SetsAndMapsTester {
     /// #############
     private static Dictionary<string, int> SummarizeDegrees(string filename) {
         var degrees = new Dictionary<string, int>();
-        foreach (var line in File.ReadLines(filename)) {
-            var fields = line.Split(",");
-            // Todo Problem 2 - ADD YOUR CODE HERE
+
+        try {
+            foreach (var line in File.ReadLines(filename)) {
+                var fields = line.Split(',');
+                string degree = fields[3].Trim();
+                if (!degrees.ContainsKey(degree)) {
+                    degrees[degree] = 0;
+                }
+                degrees[degree]++;
+            }
+        } catch (FileNotFoundException e) {
+            Console.WriteLine("File not found: " + e.FileName);
+        } catch (Exception e) {
+            Console.WriteLine("An error occurred: " + e.Message);
         }
 
         return degrees;
@@ -157,8 +176,22 @@ public static class SetsAndMapsTester {
     /// # Problem 3 #
     /// #############
     private static bool IsAnagram(string word1, string word2) {
-        // Todo Problem 3 - ADD YOUR CODE HERE
-        return false;
+        var charCount = new Dictionary<char, int>();
+
+        foreach (char c in word1.ToLower().Replace(" ", "")) {
+            if (charCount.ContainsKey(c))
+                charCount[c]++;
+            else
+                charCount[c] = 1;
+        }
+
+        foreach (char c in word2.ToLower().Replace(" ", "")) {
+            if (!charCount.ContainsKey(c) || charCount[c] == 0)
+                return false;
+            charCount[c]--;
+        }
+
+        return charCount.Values.All(v => v == 0);
     }
 
     /// <summary>
@@ -223,17 +256,12 @@ public static class SetsAndMapsTester {
     private static void EarthquakeDailySummary() {
         const string uri = "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/all_day.geojson";
         using var client = new HttpClient();
-        using var getRequestMessage = new HttpRequestMessage(HttpMethod.Get, uri);
-        using var jsonStream = client.Send(getRequestMessage).Content.ReadAsStream();
-        using var reader = new StreamReader(jsonStream);
-        var json = reader.ReadToEnd();
+        var json = client.GetStringAsync(uri).Result;
         var options = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
-
         var featureCollection = JsonSerializer.Deserialize<FeatureCollection>(json, options);
 
-        // TODO:
-        // 1. Add code in FeatureCollection.cs to describe the JSON using classes and properties 
-        // on those classes so that the call to Deserialize above works properly.
-        // 2. Add code below to print out each place a earthquake has happened today and its magitude.
+        foreach (var feature in featureCollection.Features) {
+            Console.WriteLine($"{feature.Properties.Place} - Mag {feature.Properties.Mag}");
+        }
     }
 }

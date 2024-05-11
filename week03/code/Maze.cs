@@ -12,7 +12,7 @@
 /// If a direction is true, then we can proceed.  
 ///
 /// If there is a wall, then display "Can't go that way!".  If there is no wall,
-/// then the 'currX' and 'currY' values should be changed.
+/// then the '_currX' and '_currY' values should be changed.
 /// </summary>
 public class Maze {
     private readonly Dictionary<ValueTuple<int, int>, bool[]> _mazeMap;
@@ -29,7 +29,11 @@ public class Maze {
     /// can't move, then display "Can't go that way!"
     /// </summary>
     public void MoveLeft() {
-        // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][0]) {
+            _currX--;
+        } else {
+            Console.WriteLine("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -37,7 +41,11 @@ public class Maze {
     /// can't move, then display "Can't go that way!"
     /// </summary>
     public void MoveRight() {
-        // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][1]) {
+            _currX++;
+        } else {
+            Console.WriteLine("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -45,7 +53,11 @@ public class Maze {
     /// can't move, then display "Can't go that way!"
     /// </summary>
     public void MoveUp() {
-        // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][2]) {
+            _currY--;
+        } else {
+            Console.WriteLine("Can't go that way!");
+        }
     }
 
     /// <summary>
@@ -53,7 +65,11 @@ public class Maze {
     /// can't move, then display "Can't go that way!"
     /// </summary>
     public void MoveDown() {
-        // FILL IN CODE
+        if (_mazeMap[(_currX, _currY)][3]) {
+            _currY++;
+        } else {
+            Console.WriteLine("Can't go that way!");
+        }
     }
 
     public void ShowStatus() {
